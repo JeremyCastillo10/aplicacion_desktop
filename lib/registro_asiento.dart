@@ -9,18 +9,16 @@ class RegistroAsientoScreen extends StatefulWidget {
 
 class _RegistroAsientoScreenState extends State<RegistroAsientoScreen> {
   final TextEditingController _numeroController = TextEditingController();
-  final TextEditingController _seccionController = TextEditingController();
   final TextEditingController _disponibilidadController = TextEditingController();
+  String _seccionValue = 'VIP';
+
+  final List<String> _seccionOptions = ['VIP', 'Preferencial', 'Estándar'];
 
   Future<void> _submitForm() async {
-    final String numero= _numeroController.text.trim();
-    final String seccion= _seccionController.text.trim();
+    final String numero = _numeroController.text.trim();
     final String disponibilidad = _disponibilidadController.text.trim();
 
-
-    if (numero.isEmpty ||
-        seccion.isEmpty ||
-        disponibilidad.isEmpty) {
+    if (numero.isEmpty || disponibilidad.isEmpty || _seccionValue == null) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -41,11 +39,11 @@ class _RegistroAsientoScreenState extends State<RegistroAsientoScreen> {
       return;
     }
 
-    final url = Uri.parse('https://eventoapiweb.azurewebsites.net/api/Asiento');
+    final url = Uri.parse('https://apieventapp.azurewebsites.net/api/Asiento');
 
     final Map<String, dynamic> requestData = {
       'numeroAsiento': numero,
-      'seccion': seccion,
+      'seccion': _seccionValue,
       'disponibilidad': disponibilidad,
     };
 
@@ -55,50 +53,48 @@ class _RegistroAsientoScreenState extends State<RegistroAsientoScreen> {
       body: jsonEncode(requestData),
     );
 
-if (response.statusCode == 201) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Éxito'),
-        content: Text('La solicitud POST se envió con éxito.'),
-        actions: [
-          TextButton(
-            child: Text('Aceptar'),
-            onPressed: () {
-              Navigator.of(context).pop(); // Cerrar el diálogo
-            },
-          ),
-        ],
+    if (response.statusCode == 201) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Éxito'),
+            content: Text('La solicitud POST se envió con éxito.'),
+            actions: [
+              TextButton(
+                child: Text('Aceptar'),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Cerrar el diálogo
+                },
+              ),
+            ],
+          );
+        },
       );
-    },
-  );
-} else {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Error'),
-        content: Text('Hubo un error al enviar la solicitud POST.'),
-        actions: [
-          TextButton(
-            child: Text('Aceptar'),
-            onPressed: () {
-              Navigator.of(context).pop(); // Cerrar el diálogo
-            },
-          ),
-        ],
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('Hubo un error al enviar la solicitud POST.'),
+            actions: [
+              TextButton(
+                child: Text('Aceptar'),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Cerrar el diálogo
+                },
+              ),
+            ],
+          );
+        },
       );
-    },
-  );
-}
-
+    }
   }
 
   @override
   void dispose() {
     _numeroController.dispose();
-    _seccionController.dispose();
     _disponibilidadController.dispose();
     super.dispose();
   }
@@ -115,15 +111,29 @@ if (response.statusCode == 201) {
               controller: _numeroController,
               decoration: InputDecoration(labelText: 'Numero Asiento'),
             ),
-            TextField(
-              controller: _seccionController,
+            SizedBox(height: 16.0),
+            DropdownButtonFormField(
               decoration: InputDecoration(labelText: 'Seccion'),
+              value: _seccionValue,
+              onChanged: (String? newValue) {
+  setState(() {
+  _seccionValue = newValue!;
+});
+
+},
+
+              items: _seccionOptions.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
+            SizedBox(height: 16.0),
             TextField(
               controller: _disponibilidadController,
               decoration: InputDecoration(labelText: 'Disponibilidad'),
             ),
-  
             SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: _submitForm,
@@ -135,4 +145,3 @@ if (response.statusCode == 201) {
     );
   }
 }
-

@@ -41,7 +41,7 @@ class _RegistroClienteScreenState extends State<RegistroClienteScreen> {
       return;
     }
 
-    final url = Uri.parse('https://eventoapiweb.azurewebsites.net/api/Cliente');
+    final url = Uri.parse('https://apieventapp.azurewebsites.net/api/Cliente');
 
     final Map<String, dynamic> requestData = {
       'nombre': nombre,

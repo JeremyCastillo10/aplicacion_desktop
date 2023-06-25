@@ -15,6 +15,7 @@ class _RegistroSesionScreenState extends State<RegistroSesionScreen> {
   Future<void> _submitForm() async {
     final String nombre = _nombreController.text.trim();
     int capacidad = int.parse(_capacidadController.text.trim());
+    List<String> secciones = [];
 
 
 
@@ -41,7 +42,7 @@ class _RegistroSesionScreenState extends State<RegistroSesionScreen> {
       return;
     }
 
-    final url = Uri.parse('https://eventoapiweb.azurewebsites.net/api/Seccion');
+    final url = Uri.parse('https://apieventapp.azurewebsites.net/api/Seccion');
 
     final Map<String, dynamic> requestData = {
       'nombre': nombre,
