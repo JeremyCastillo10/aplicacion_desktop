@@ -105,7 +105,7 @@ if (response.statusCode == 201) {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Registro de Evento')),
+      appBar: AppBar(title: Text('Registro de Seccion')),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(

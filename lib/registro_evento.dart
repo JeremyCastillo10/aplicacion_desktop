@@ -23,11 +23,11 @@ class _RegistroEventoScreenState extends State<RegistroEventoScreen> {
     final String descripcion = _descripcionController.text.trim();
     final String fecha = _fechaController.text.trim();
 
-    if (nombreEvento.isEmpty ||
+    if(nombreEvento.isEmpty||
         ubicacion.isEmpty ||
         imagenUrl.isEmpty ||
         categoria.isEmpty ||
-        descripcion.isEmpty ||
+        descripcion.isEmpty||
         fecha.isEmpty) {
       showDialog(
         context: context,
